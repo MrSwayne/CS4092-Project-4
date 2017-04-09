@@ -59,111 +59,223 @@ public class FlightManager
 		String input = "";
 		boolean validStartDate = false;
 		boolean validEndDate = false;
-		boolean valid time = false;
-		
+		boolean validTime = false;
+		String startDate = "";
+		String endDate = "";
+		boolean validDate = false;
+
+		boolean needValidateCode = false, needValidateFlightNum = false, needValidateDays = false, needValidateDate = false;
+
 		if((args.length < 6 && args.length > 1) || args.length == 9)
 		{
-			//Validate flight number
-			if(args[0].equals("AF") || args[0].equals("EF") || args[0].equals("DF"))
+			if(args[0].equals("AA") || args[0].equals("EA") || args[0].equals("DA"))
+				needValidateCode = true;
+
+			if(args[0].equals("AF"))
 			{
-				if(args[1].length() < 3 || !(args[1].substring(0,2).matches("[a-zA-Z]{2}") && args[1].substring(2,args[1].length()).matches("\\d{1,}")) )
-					System.out.println("Error, flight number should be 2 Letters followed by a string of numbers e.g AE1240");
-				else if(args[1].length() > 2)
-					validFlightNumber = true;
+				needValidateCode = true;
+				needValidateFlightNum = true;
+				needValidateDays = true;
+				needValidateDate = true;
+			}
+			if(args[0].equals("EF"))
+			{
+				needValidateFlightNum = true;
+				needValidateDays = true;
+				needValidateDate = true;
+			}
+			if(args[0].equals("DF"))
+				needValidateFlightNum = true;
+			if(args[0].equals("SD"))
+				needValidateDate = true;
+
+			//Validate flight number
+			if(needValidateFlightNum)
+			{
+				if(args[0].equals("AF") || args[0].equals("EF") || args[0].equals("DF"))
+				{
+					if(args[1].length() < 3 || !(args[1].substring(0,2).matches("[a-zA-Z]{2}") && args[1].substring(2,args[1].length()).matches("\\d{1,}")) )
+						System.out.println("Error, flight number should be 2 Letters followed by a string of numbers e.g AE1240");
+					else if(args[1].length() > 2)
+						validFlightNumber = true;
+				}
 			}
 
 			//validate AirportCode
-			if(args[0].equals("AA") || args[0].equals("EA") || args[0].equals("DA") || args[0].equals("AF"))
+			if(needValidateCode)
 			{
-				ArrayList<String> airports = new ArrayList<String>();
-				ArrayList<String> airportsIn = new ArrayList<String>();
+				if(args[0].equals("AA") || args[0].equals("EA") || args[0].equals("DA") || args[0].equals("AF"))
+				{
+					ArrayList<String> airports = new ArrayList<String>();
+					ArrayList<String> airportsIn = new ArrayList<String>();
 
-				if(args[0].equals("AA"))
-					{
-					if(args[2].matches("[a-zA-Z]{3}"))
-						validAirportCode = true;
-						airportsIn.add(args[2]);
-					}
-
-				else if(args[0].equals("EA") || args[0].equals("DA"))
-					{
-					if(args[1].matches("[a-zA-Z]{3}"))
-						validAirportCode = true;
-						airportsIn.add(args[1]);
-					}
-				else if(args[0].equals("AF"))
-					{
-					if(args[2].matches("[a-zA-Z]{3}") && args[3].matches("[a-zA-Z]{3}"))
-						if(!(args[2].equals(args[3])))
+					if(args[0].equals("AA"))
 						{
+						if(args[2].matches("[a-zA-Z]{3}"))
 							validAirportCode = true;
 							airportsIn.add(args[2]);
-							airportsIn.add(args[3]);
 						}
-						else
+
+					else if(args[0].equals("EA") || args[0].equals("DA"))
 						{
-							System.out.println("Error, departure airport and arrival airport cannot be the same");
-							sameAirport = true;
+						if(args[1].matches("[a-zA-Z]{3}"))
+							validAirportCode = true;
+							airportsIn.add(args[1]);
 						}
-					}
-				if(!validAirportCode && !sameAirport)
-				System.out.println("Error, invalid airport code, Airport codes should be 3 alphabetic characters long");
+					else if(args[0].equals("AF"))
+						{
+						if(args[2].matches("[a-zA-Z]{3}") && args[3].matches("[a-zA-Z]{3}"))
+							if(!(args[2].equals(args[3])))
+							{
+								validAirportCode = true;
+								airportsIn.add(args[2]);
+								airportsIn.add(args[3]);
+							}
+							else
+							{
+								System.out.println("Error, departure airport and arrival airport cannot be the same");
+								sameAirport = true;
+							}
+						}
+					if(!validAirportCode && !sameAirport)
+					System.out.println("Error, invalid airport code, Airport codes should be 3 alphabetic characters long");
+				}
 			}
 
 			//Validate days
 
-			if(args[0].equals("AF") || args[0].equals("EF"))
+			if(needValidateDays)
 			{
-				if(args[0].equals("AF"))	input = args[6];
-				else						input = args[2];
-				String days = "MTWTFSS";
-				String dash = "-";
-				int countInOrder=0;
-				int matchCount=0;
-				boolean matchThisPos=false;
-				if(input.length() == 7)
+				if(args[0].equals("AF") || args[0].equals("EF"))
 				{
-					for(int i = 0; i < input.length(); i++)
+					if(args[0].equals("AF"))	input = args[6];
+					else						input = args[2];
+					String days = "MTWTFSS";
+					String dash = "-";
+					int countInOrder=0;
+					int matchCount=0;
+					boolean matchThisPos=false;
+					if(input.length() == 7)
 					{
-						for(int j = countInOrder; j < days.length(); j++)
-							if((input.charAt(i)==days.charAt(j) || input.charAt(i) == dash.charAt(0)) && !matchThisPos)
-							{
-								matchCount++;
-								countInOrder= j+1;
-								matchThisPos=true;
-							}
-						matchThisPos=false;
+						for(int i = 0; i < input.length(); i++)
+						{
+							for(int j = countInOrder; j < days.length(); j++)
+								if((input.charAt(i)==days.charAt(j) || input.charAt(i) == dash.charAt(0)) && !matchThisPos)
+								{
+									matchCount++;
+									countInOrder= j+1;
+									matchThisPos=true;
+								}
+							matchThisPos=false;
+						}
+						if(matchCount==input.length())
+							validDays = true;
 					}
-					if(matchCount==input.length())
-						validDays = true;
 				}
-			}
-			if(!validDays)
-				System.out.println("Error, invalid days inputted");
-			if(input.equals("-------"))
-			{
-				validDays = false;
-				System.out.println("Error, flight days cannot be empty i.e '-------'");
+				if(!validDays)
+					System.out.println("Error, invalid days inputted");
+				if(input.equals("-------"))
+				{
+					validDays = false;
+					System.out.println("Error, flight days cannot be empty i.e '-------'");
+				}
 			}
 
 
 			//validate date
-
-			if(args[0].equals("AF") || args[0].equals("EF") || args[0].equals("SD"))
+			if(needValidateDate)
 			{
+				if(args[0].equals("AF") || args[0].equals("EF") || args[0].equals("SD"))
+				{
+					String[] startDates = new String[3];
+					String[] endDates = new String[3];
+					boolean twoDates = true;
 
+					if(args[0].equals("AF"))	
+					{
+						startDates = args[7].split("/");
+							validStartDate = checkDate(startDates);
+						endDates = args[8].split("/");
+							validEndDate = checkDate(endDates);
+					}
+					else if(args[0].equals("EF"))
+					{
+						startDates = args[3].split("/");
+							validStartDate = checkDate(startDates);
+						endDates = args[4].split("/");
+							validEndDate = checkDate(endDates);
+
+					}
+					else
+					{
+						startDates = args[3].split("/");
+							validStartDate = checkDate(startDates);
+						twoDates = false;
+						validEndDate = true;
+					}		
+
+					if(!validStartDate)
+						System.out.println("Error, invalid start date");
+					else if (!validEndDate)
+						System.out.println("Error, invalid end date");
+					if(validStartDate && validEndDate)
+					{
+						if(!(args[0].equals("SD")))
+						{
+							Calendar startD = Calendar.getInstance();
+							Calendar endD = Calendar.getInstance();
+
+							startD.set(Integer.parseInt(startDates[2]), Integer.parseInt(startDates[1]), Integer.parseInt(startDates[0]));
+							endD.set(Integer.parseInt(endDates[2]), Integer.parseInt(endDates[1]), Integer.parseInt(endDates[0]));
+
+							if(!(endD.after(startD)))
+								System.out.println("Error, End date appears to be before the start date");
+							else
+								validEndDate = false;
+						}
+					}
+					if(validStartDate && validEndDate)
+						validDate = true;
+				}
 			}
 		}
 
 		else
 			System.out.println("Error, invalid command-line arguments supplied.");
 
+		if(needValidateDate && validDate)					isValid = true;
+		if(needValidateDays && validDays)					isValid = true;
+		if(needValidateFlightNum && validFlightNumber )		isValid = true;
+		if(needValidateCode && validAirportCode)			isValid = true;
 
-
-
+		if(isValid)
+			System.out.println("Valid :)");
 		return isValid;
-	
 	}
+
+	public static boolean checkDate(String[] dateElements)
+	{
+		int ddInt, mmInt, yyInt;
+		int[] daysArray = {31,28,31,30,31,30,31,31,30,31,30,31};
+		boolean dateIsValid = true;
+		
+		ddInt= Integer.parseInt(dateElements[0]);
+		mmInt= Integer.parseInt(dateElements[1]);
+		yyInt= Integer.parseInt(dateElements[2]);
+		
+		if(ddInt == 0 || mmInt == 0 || yyInt == 0)																dateIsValid =false;
+		
+		else if(mmInt > 12)																						dateIsValid =false;
+		
+		else if(ddInt == 29 && mmInt == 2 && ((yyInt % 4 == 0 && yyInt % 100 != 0) || (yyInt % 400 == 0)))		dateIsValid =true;
+		
+		else if(ddInt > daysArray[mmInt -1])																	dateIsValid =false;
+
+		return dateIsValid;
+	}
+
+
+
 
 	public static void displayInstructions() 
 	{ 

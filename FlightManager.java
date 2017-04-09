@@ -27,6 +27,7 @@ public class FlightManager
 					args[i] = args[i].toUpperCase();
 
 				readInFiles();
+				args=menus();
 				if(validation(args))
 				{
 					switch(args[0].toUpperCase())
@@ -59,7 +60,87 @@ public class FlightManager
 		}
 
 	}
+	public static String[] menus()
+	{
+		String[] choices = { "Add Airport", "Edit Airport", "Delete Airport", "Add Flight", "Edit Flight", "Delete Flight", "Search Flight", "Search Flight by Date" };
+		String input = (String) JOptionPane.showInputDialog(null, "Choose a program to launch", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, choices,choices[1]);
+		String[] selection;
+		System.out.println(input);
+		switch(input)
+		{
+			case "Add Airport":     
+				selection = new String[3];
+				selection[0]="AA";
+				selection[1] = JOptionPane.showInputDialog("Please enter an airport name");
+				selection[2] = JOptionPane.showInputDialog("Please enter a three letter airport code");
+				break;
+				
+			case "Edit Airport":
+				selection = new String[3];
+				selection[0]="EA";
+				selection[1] = JOptionPane.showInputDialog("Please select an airport code");
+				selection[2] = JOptionPane.showInputDialog("Please enter new airport name");
+				break;
+			case "Delete Airpor":
+				selection = new String[2];
+				selection[0]="DA";
+				selection[1] = JOptionPane.showInputDialog("Please the airport code to be deleted");
+				break;
 
+			case "Add Flight":
+				selection = new String[9];
+				selection[0]="AF";
+				selection[1] = JOptionPane.showInputDialog("Please enter flight number");
+				selection[2] = JOptionPane.showInputDialog("Please enter departing airport");
+				selection[3] = JOptionPane.showInputDialog("Please enter arrival airport");
+				selection[4] = JOptionPane.showInputDialog("Please enter departing time");
+				selection[5] = JOptionPane.showInputDialog("Please enter arival time");
+				selection[6] = JOptionPane.showInputDialog("Please enter week schedule");
+				selection[7] = JOptionPane.showInputDialog("Please enter starting flight date");
+				selection[8] = JOptionPane.showInputDialog("Please enter last flight date");
+				break;
+
+
+			case "Edit Flight":          
+				selection = new String[5];
+				selection[0]="EF";
+				selection[1] = JOptionPane.showInputDialog("Please enter flight number");
+				selection[2] = JOptionPane.showInputDialog("Please enter week schedule");
+				selection[3] = JOptionPane.showInputDialog("Please enter starting flight date");
+				selection[4] = JOptionPane.showInputDialog("Please enter last flight date");
+				break;
+
+
+			case "Delete Flight":        
+				selection = new String[2];
+				selection[0]="DF";
+				selection[1] = JOptionPane.showInputDialog("Please enter flight number");
+				break;
+
+			case "Search Flight":      
+				selection = new String[3];
+				selection[0]="SF";
+				selection[1] = JOptionPane.showInputDialog("Please enter departing airport");
+				selection[2] = JOptionPane.showInputDialog("Please enter arival time");
+				break;
+
+			case "Search Flight by Date":       
+				selection = new String[4];
+				selection[0]="SD";
+				selection[1] = JOptionPane.showInputDialog("Please enter departing airport");
+				selection[2] = JOptionPane.showInputDialog("Please enter arival time");
+				selection[3] = JOptionPane.showInputDialog("Please enter starting flight date");
+				break;
+
+			default:            
+			{
+				System.out.println("Error, invalid command supplied."); 
+				selection = new String[0];
+			}           
+		}
+
+	return selection;
+    }
 
 	public static boolean validation(String[] args)
 	{

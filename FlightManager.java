@@ -248,8 +248,6 @@ public class FlightManager
 		if(needValidateFlightNum && validFlightNumber )		isValid = true;
 		if(needValidateCode && validAirportCode)			isValid = true;
 
-		if(isValid)
-			System.out.println("Valid :)");
 		return isValid;
 	}
 

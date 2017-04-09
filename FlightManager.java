@@ -16,35 +16,48 @@ public class FlightManager
 
 	public static void main(String[] args) throws IOException
 	{
-		File airportsFile    = 	new File("airports.txt");
-		File flightsFile     =  new File("flights.txt");
-
-		if(validateFiles(airportsFile) && validateFiles(flightsFile))
+		try
 		{
-			for(int i = 0;i < args.length;i++)
-				args[i] = args[i].toUpperCase();
+			File airportsFile    = 	new File("airports.txt");
+			File flightsFile     =  new File("flights.txt");
 
-			readInFiles();
-			
-			if(validation(args))
+			if(validateFiles(airportsFile) && validateFiles(flightsFile))
 			{
-				switch(args[0].toUpperCase())
+				for(int i = 0;i < args.length;i++)
+					args[i] = args[i].toUpperCase();
+
+				readInFiles();
+				if(validation(args))
 				{
-					case "AA":       	Airport.add(airport, flight, args[1],args[2]); break;
-					case "EA":       	Airport.edit(airport, flight, args[1],args[2]); break;
-					case "DA":       	Airport.delete(airport, flight, args[1]); break;
-					case "EF":       	Flight.edit(airport, flight, args[1], args[2], args[3], args[4]); break;
-					case "DF":       	Flight.delete(airport, flight, args[1]); break;
-					case "SF":       	Flight.searchFlight(airport, flight, args[1], args[2]); break;
-					case "SD":      	Flight.searchDate(airport, flight, args[1], args[2], args[3]); break;
-					default:        	
+					switch(args[0].toUpperCase())
 					{
-						System.out.println("Error, invalid command supplied.");	
-						displayInstructions();
-					}			
+						case "AA":       	Airport.add(airport, flight, args[1],args[2]); break;
+						case "EA":       	Airport.edit(airport, flight, args[1],args[2]); break;
+						case "DA":       	Airport.delete(airport, flight, args[1]); break;
+						case "AF":			Flight.add(airport, flight, args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]); break;
+						case "EF":       	Flight.edit(airport, flight, args[1], args[2], args[3], args[4]); break;
+						case "DF":       	Flight.delete(airport, flight, args[1]); break;
+						case "SF":       	Flight.searchFlight(airport, flight, args[1], args[2]); break;
+						case "SD":      	Flight.searchDate(airport, flight, args[1], args[2], args[3]); break;
+						default:        	
+						{
+							System.out.println("Error, invalid command supplied.");	
+						}			
+					}
 				}
 			}
+
 		}
+		catch(ArrayIndexOutOfBoundsException e)
+		{
+			System.out.println("Error, invalid command supplied.");
+			displayInstructions();
+		}
+		catch(NumberFormatException e)
+		{
+
+		}
+
 	}
 
 
@@ -63,8 +76,10 @@ public class FlightManager
 		String startDate = "";
 		String endDate = "";
 		boolean validDate = false;
+		boolean validStartTime = false;
+		boolean validEndTime = false;
 
-		boolean needValidateCode = false, needValidateFlightNum = false, needValidateDays = false, needValidateDate = false;
+		boolean needValidateCode = false, needValidateFlightNum = false, needValidateDays = false, needValidateDate = false, needValidateTime = false;;
 
 		if((args.length < 6 && args.length > 1) || args.length == 9)
 		{
@@ -77,6 +92,7 @@ public class FlightManager
 				needValidateFlightNum = true;
 				needValidateDays = true;
 				needValidateDate = true;
+				needValidateTime = true;
 			}
 			if(args[0].equals("EF"))
 			{
@@ -98,6 +114,33 @@ public class FlightManager
 						System.out.println("Error, flight number should be 2 Letters followed by a string of numbers e.g AE1240");
 					else if(args[1].length() > 2)
 						validFlightNumber = true;
+				}
+			}
+
+
+			//validate time
+			if(needValidateTime)
+			{
+				String timeStart = args[4];
+				String timeEnd = args[5];
+
+				if (!(timeStart.matches("[0-9]{4}") && timeEnd.matches("[0-9]{4}")))
+					System.out.println("Error, invalid time entered, time should be in 24 hour time i.e 1530 or 0853");
+				else
+				{
+					if(Integer.parseInt(timeStart.substring(0,2)) >= 00 && Integer.parseInt(timeStart.substring(0,2)) <= 23)
+						if(Integer.parseInt(timeStart.substring(2,4)) < 60 && Integer.parseInt(timeStart.substring(2,4)) >= 00)
+								validStartTime = true;
+					if(Integer.parseInt(timeEnd.substring(0,2)) >= 00 && Integer.parseInt(timeStart.substring(0,2)) <= 23)
+						if(Integer.parseInt(timeEnd.substring(2,4)) < 60 && Integer.parseInt(timeEnd.substring(2,4)) >= 00)
+								validEndTime = true;
+
+					if(validStartTime && validEndTime)
+						validTime = true;
+					else
+						System.out.println("Error, invalid time entered");
+
+
 				}
 			}
 
@@ -204,7 +247,6 @@ public class FlightManager
 							validStartDate = checkDate(startDates);
 						endDates = args[4].split("/");
 							validEndDate = checkDate(endDates);
-
 					}
 					else
 					{
@@ -231,7 +273,7 @@ public class FlightManager
 							if(!(endD.after(startD)))
 								System.out.println("Error, End date appears to be before the start date");
 							else
-								validEndDate = false;
+								validEndDate = true;
 						}
 					}
 					if(validStartDate && validEndDate)
@@ -243,10 +285,23 @@ public class FlightManager
 		else
 			System.out.println("Error, invalid command-line arguments supplied.");
 
-		if(needValidateDate && validDate)					isValid = true;
-		if(needValidateDays && validDays)					isValid = true;
-		if(needValidateFlightNum && validFlightNumber )		isValid = true;
-		if(needValidateCode && validAirportCode)			isValid = true;
+			if(args[0].equals("AA") || args[0].equals("EA") || args[0].equals("DA"))
+				if (validAirportCode)																		isValid = true;
+
+			if(args[0].equals("AF"))
+				if(validAirportCode && validFlightNumber && validDays && validDate && validTime)			isValid = true;
+
+			if(args[0].equals("EF"))
+				if(validFlightNumber && validDays && validDate)												isValid = true;
+			
+			if(args[0].equals("DF"))
+				if(validFlightNumber)																		isValid = true;
+
+			if(args[0].equals("SD"))
+				if(validDate)																				isValid = true;
+
+			if(!isValid)
+				displayInstructions();
 
 		return isValid;
 	}
@@ -268,6 +323,7 @@ public class FlightManager
 		else if(ddInt == 29 && mmInt == 2 && ((yyInt % 4 == 0 && yyInt % 100 != 0) || (yyInt % 400 == 0)))		dateIsValid =true;
 		
 		else if(ddInt > daysArray[mmInt -1])																	dateIsValid =false;
+
 
 		return dateIsValid;
 	}

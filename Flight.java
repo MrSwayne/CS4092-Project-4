@@ -66,9 +66,46 @@ public class Flight
 	}
 
 
+	/*
+		@author Adam Swayne
+
+		input:
+
+		Processing:
+
+		output:
+	*/
+
 	public static void add(ArrayList<Airport> airportList, ArrayList<Flight> flightList, String flightNum, String airportDepart, String airportArrival, String timeDepart, String timeArrival, String days, String dateStart, String dateEnd)
 	{
-		
+		boolean dCodeFound = false;
+		boolean aCodeFound = false;
+		boolean flightExists = false;
+
+		for(int i = 0;i < airportList.size();i++)
+		{
+			if(airportList.get(i).code().equalsIgnoreCase(airportDepart))
+				dCodeFound = true;
+			if(airportList.get(i).code().equalsIgnoreCase(airportArrival))
+				aCodeFound = true;
+		}
+		if(!(aCodeFound))	System.out.println("Error, arrival airport not found in Airports.txt");
+		if(!(dCodeFound))	System.out.println("Error, Departure airport not found in Airports.txt");
+		else
+		{
+
+			for(int i = 0;i < flightList.size() && !flightExists;i++)
+				if(flightList.get(i).number().equalsIgnoreCase(flightNum))	
+					flightExists = true;	
+			if(!flightExists)
+			{
+				System.out.println("Flight " + flightNum + " added successfully");
+				flightList.add(new Flight(flightNum, airportDepart, airportArrival, timeDepart, timeArrival, days, dateStart, dateEnd));
+			}
+			else
+				System.out.println("Error, flight " + flightNum + " already exists");
+		}
+		sortFiles(airportList, flightList);
 	}
 
      /*

@@ -65,6 +65,12 @@ public class Flight
 		return dateArrival;
 	}
 
+
+	public static void add(ArrayList<Airport> airportList, ArrayList<Flight> flightList, String flightNum, String airportDepart, String airportArrival, String timeDepart, String timeArrival, String days, String dateStart, String dateEnd)
+	{
+		
+	}
+
      /*
 		@authors Matthew Blake
 	

@@ -43,10 +43,10 @@ public class Airport
 		if(!alreadyExists)
 		{
 			airportList.add(new Airport(airport, airportCodeIn));
-			System.out.println("The airport was added successfully");
+			JOptionPane.showMessageDialog(null,"The airport was added successfully");
 		}
 		else
-			System.out.println("Error, airport/airport code already exists");
+			JOptionPane.showMessageDialog(null,"Error, airport/airport code already exists");
 		sortFiles(airportList, flightList);
     }
 	
@@ -72,7 +72,7 @@ public class Airport
 			if(airportList.get(i).code.equalsIgnoreCase(airportCode))
 			{
 				airportList.set(i, new Airport(airport, airportCode));
-				System.out.println("Airport successfully edited");
+				JOptionPane.showMessageDialog(null,"Airport successfully edited");
 			}		
 		}
 		sortFiles(airportList, flightList);
@@ -120,11 +120,11 @@ public class Airport
 					i--;
 				}
 			}
-			System.out.println("Airport " + airportCode + " deleted successfully");
+			JOptionPane.showMessageDialog(null,"Airport " + airportCode + " deleted successfully");
 		}
 		else
 		{
-			System.out.println("Error, Airport Code " + airportCode + " not found in Airports.txt");
+			JOptionPane.showMessageDialog(null,"Error, Airport Code " + airportCode + " not found in Airports.txt");
 		}
 		sortFiles(airportList, flightList);
 	}
@@ -197,7 +197,7 @@ public class Airport
 		}
 		catch(IOException e)
 		{
-			System.out.print("IOException : " + e.getMessage());
+			JOptionPane.showMessageDialog(null,"IOException : " + e.getMessage());
 		}
      }
 
@@ -229,7 +229,7 @@ public class Airport
 		}
 		catch(IOException e)
         	{
-            		System.out.print("IOException : " + e.getMessage());
+            		JOptionPane.showMessageDialog(null,"IOException : " + e.getMessage());
 		}
      }
 }

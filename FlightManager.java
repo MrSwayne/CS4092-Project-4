@@ -13,66 +13,53 @@ public class FlightManager
 	public static ArrayList<Airport> airport = new ArrayList<Airport>();
 	public static ArrayList<Flight>	 flight = new ArrayList<Flight>();
 
-
 	public static void main(String[] args) throws IOException
+	{
+			if(filesStart())
+			{
+				programLauncher();
+			}
+			restart();
+	}
+	public static boolean filesStart()
 	{
 		try
 		{
 			File airportsFile    = 	new File("airports.txt");
 			File flightsFile     =  new File("flights.txt");
-
 			if(validateFiles(airportsFile) && validateFiles(flightsFile))
 			{
-				for(int i = 0;i < args.length;i++)
-					args[i] = args[i].toUpperCase();
-
 				readInFiles();
-				args=menus();
-			
-				switch(args[0].toUpperCase())
-				{
-					case "AA":       	Airport.add(airport, flight, args[1],args[2]); break;
-					case "EA":       	Airport.edit(airport, flight, args[1],args[2]); break;
-					case "DA":       	Airport.delete(airport, flight, args[1]); break;
-					case "AF":			Flight.add(airport, flight, args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]); break;
-					case "EF":       	Flight.edit(airport, flight, args[1], args[2], args[3], args[4]); break;
-					case "DF":       	Flight.delete(airport, flight, args[1]); break;
-					case "SF":       	Flight.searchFlight(airport, flight, args[1], args[2]); break;
-					case "SD":      	Flight.searchDate(airport, flight, args[1], args[2], args[3]); break;
-					default:        	
-					{
-						System.out.println("Error, invalid command supplied.");	
-					}			
-				}
+				return true;
 			}
-			
-			
-
-			restart();
-			
-
+			else return false;
 		}
-		catch(ArrayIndexOutOfBoundsException e)
+		catch(NumberFormatException e) {JOptionPane.showMessageDialog(null,"Error, text file not found","Error",JOptionPane.PLAIN_MESSAGE);}
+		catch(IOException ex){JOptionPane.showMessageDialog(null,"Error, text file not found","Error",JOptionPane.PLAIN_MESSAGE);}
+		return false;
+	}
+	public static void programLauncher()
+	{
+		String[] args;
+		args=menus();
+		switch(args[0].toUpperCase())
 		{
-			System.out.println("Error, invalid command supplied.");
-			
+			case "AA":       	Airport.add(airport, flight, args[1],args[2]); break;
+			case "EA":       	Airport.edit(airport, flight, args[1],args[2]); break;
+			case "DA":       	Airport.delete(airport, flight, args[1]); break;
+			case "AF":			Flight.add(airport, flight, args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]); break;
+			case "EF":       	Flight.edit(airport, flight, args[1], args[2], args[3], args[4]); break;
+			case "DF":       	Flight.delete(airport, flight, args[1]); break;
+			case "SF":       	Flight.searchFlight(airport, flight, args[1], args[2]); break;
+			case "SD":      	Flight.searchDate(airport, flight, args[1], args[2], args[3]); break;
+			default:            JOptionPane.showMessageDialog(null,"Error, selection not found","Error",JOptionPane.PLAIN_MESSAGE);
 		}
-		catch(NumberFormatException e)
-		{
-
-		}
-
 	}
 	public static void restart()
 	{
 		int n = JOptionPane.showConfirmDialog(null,"would you like to use another task","Flight Manager",JOptionPane.YES_NO_OPTION);
-		if(n == JOptionPane.YES_OPTION){
-			JOptionPane.showMessageDialog(null, "GOODBYE");
-		}
-		else {
-			
-			System.exit(0);
-		}
+		if(n == JOptionPane.YES_OPTION) programLauncher();
+		else System.exit(0);
 	}
 	/*
 		@authors 		Ian McKay
@@ -95,17 +82,14 @@ public class FlightManager
 		for (int i=0;i<airport.size();i++) airports.add(airport.get(i).name());
 		String[] airportNames= airports.toArray(new String[airports.size()]);
 		
-		
 		ArrayList<String> airportCodes = new ArrayList<String>();
-		for (int i=0;i<airport.size();i++) airportCodes.add(airport.get(i).name());
+		for (int i=0;i<airport.size();i++) airportCodes.add(airport.get(i).code());
 		String[] airportCode= airportCodes.toArray(new String[airportCodes.size()]);
-		
 		
 		ArrayList<String> flights = new ArrayList<String>();
 		for (int i=0;i<flight.size();i++) flights.add(flight.get(i).number());
 		String[] flightNums= flights.toArray(new String[flights.size()]);
 		switch(input)
-		
 		
 		{
 			case "Add Airport":     
@@ -121,10 +105,10 @@ public class FlightManager
 				selection[1] = (String) JOptionPane.showInputDialog(null, "Choose an airport to edit.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode,airportCode[0]);
 				selection[2] = menuInput("Please enter new airport name",selection,2);
 				break;
-			case "Delete Airpor":
+			case "Delete Airport":
 				selection = new String[2];
 				selection[0]="DA";
-				selection[1] = (String) JOptionPane.showInputDialog(null, "Choose an airport to delete.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportNames,airportNames[0]);
+				selection[1] = (String) JOptionPane.showInputDialog(null, "Choose an airport to delete.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode,airportCode[0]);
 				break;
 
 			case "Add Flight":
@@ -143,8 +127,6 @@ public class FlightManager
 				selection[7] = menuInput("Please enter starting flight date.",selection,7);
 				selection[8] = menuInput("Please enter last flight date.",selection,8);
 				break;
-
-
 			case "Edit Flight":          
 				selection = new String[5];
 				selection[0]="EF";
@@ -153,7 +135,6 @@ public class FlightManager
 				selection[3] = menuInput("Please enter starting flight date.",selection,3);
 				selection[4] = menuInput("Please enter last flight date.",selection,4);
 				break;
-
 
 			case "Delete Flight":        
 				selection = new String[2];
@@ -186,7 +167,7 @@ public class FlightManager
 
 			default:            
 			{
-				System.out.println("Error, invalid command supplied."); 
+				JOptionPane.showMessageDialog(null,"Error, selection does not exist","Error",JOptionPane.PLAIN_MESSAGE);
 				selection = new String[0];
 			}           
 		}
@@ -195,18 +176,14 @@ public class FlightManager
 	public static String menuInput(String messege, String[] args, int num)
 	{
 		try {
-			
-			String input;
 			boolean inputRecieved=false;
 			args[num]= JOptionPane.showInputDialog(messege);
 			while(!inputRecieved){
-				if(args[num].equals("") || !validation(args,num))input= JOptionPane.showInputDialog(messege);
+				if(args[num].equals("") || !validation(args,num))args[num]= JOptionPane.showInputDialog(messege);
 				else inputRecieved=true;
 			}
 			return args[num];
-		} catch(NullPointerException e) {
-			restart();
-		}
+		} catch(NullPointerException e) {restart();}
 		return args[num];
 	}
 	/*
@@ -273,7 +250,6 @@ public class FlightManager
                 {
                     if(args[2].matches("[a-zA-Z]{3}"))
                     {
-                        
                         for(int i=0;i<airportSize;i++)
                         {                           //looping through the airport list 
                             if(airport.get(i).code.equalsIgnoreCase(args[2])){
@@ -392,10 +368,8 @@ public class FlightManager
 					startD.set(Integer.parseInt(startDates[2]), Integer.parseInt(startDates[1]), Integer.parseInt(startDates[0]));
 					endD.set(Integer.parseInt(endDates[2]), Integer.parseInt(endDates[1]), Integer.parseInt(endDates[0]));
 
-					if(!(endD.after(startD)))
-						JOptionPane.showMessageDialog(null,"Error, End date appears to be before the start date","Error",JOptionPane.PLAIN_MESSAGE);
-					else
-						return true;
+					if(!(endD.after(startD))) JOptionPane.showMessageDialog(null,"Error, End date appears to be before the start date","Error",JOptionPane.PLAIN_MESSAGE);
+					else return true;
 				}
 				break;
             
@@ -458,7 +432,6 @@ public class FlightManager
 */
     public static boolean checkDate(String[] dateElements)
     {
-
         int ddInt, mmInt, yyInt;
         int[] daysArray = {31,28,31,30,31,30,31,31,30,31,30,31};
         boolean dateIsValid = true;
@@ -476,7 +449,6 @@ public class FlightManager
 			JOptionPane.showMessageDialog(null,"Error, date cannot be before current date","Error",JOptionPane.PLAIN_MESSAGE);
 			return false;
 		} 
-        
         if(ddInt == 0 || mmInt == 0 || yyInt == 0)
 		{
 			JOptionPane.showMessageDialog(null,"Error, niether day, month, or year can be 0.","Error",JOptionPane.PLAIN_MESSAGE);
@@ -496,10 +468,8 @@ public class FlightManager
 			JOptionPane.showMessageDialog(null,"Error, the day cannot be that high of a number.","Error",JOptionPane.PLAIN_MESSAGE);
 			dateIsValid =false;
 		}
-
         return dateIsValid;
     }
-
 /*
 		@authors	Adam Swayne
 	
@@ -509,13 +479,11 @@ public class FlightManager
 	
         Output:		Returns true when files are present
 */
-
 	public static boolean validateFiles(File file) throws IOException
 	{
 		if(!file.exists())	 		file.createNewFile();			
 		return true;
 	}
-
 /*
 		@authors 		Adam Swayne
 	

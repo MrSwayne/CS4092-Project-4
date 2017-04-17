@@ -21,6 +21,12 @@ public class FlightManager
 			}
 			restart();
 	}
+	/*
+		@authors 		Adam Swayne
+		Input: 			No Input
+		Processing:		loads files into memory
+        Output:			returns true when files have been loaded into memory and validated	
+	*/
 	public static boolean filesStart()
 	{
 		try
@@ -38,6 +44,12 @@ public class FlightManager
 		catch(IOException ex){JOptionPane.showMessageDialog(null,"Error, text file not found","Error",JOptionPane.PLAIN_MESSAGE);}
 		return false;
 	}
+	/*
+		@authors 		Ian McKay
+		Input: 			No Input
+		Processing:		Gets input from menus() and then send it to the method chosen by the user
+        Output:			No Output		
+	*/
 	public static void programLauncher()
 	{
 		String[] args;
@@ -55,6 +67,12 @@ public class FlightManager
 			default:            JOptionPane.showMessageDialog(null,"Error, selection not found","Error",JOptionPane.PLAIN_MESSAGE);
 		}
 	}
+	/*
+		@authors 		Ian McKay
+		Input: 			No Input
+		Processing:		Asks user if they want to start the program again
+        Output:			No Output		
+	*/
 	public static void restart()
 	{
 		int n = JOptionPane.showConfirmDialog(null,"would you like to use another task","Flight Manager",JOptionPane.YES_NO_OPTION);
@@ -63,13 +81,10 @@ public class FlightManager
 	}
 	/*
 		@authors 		Ian McKay
-	
 		Input: 			No Input
-	
-		Processing:		
-	
+		Processing:		Takes input from the user, sends it to validation for each input
         Output:			String array containing all the inputs		
-*/
+	*/
 	public static String[] menus()
 	{
 		String[] choices = { "Add Airport", "Edit Airport", "Delete Airport", "Add Flight", "Edit Flight", "Delete Flight", "Search Flight", "Search Flight by Date" };
@@ -507,15 +522,12 @@ public class FlightManager
 			data = in.nextLine().split(",");
 			airport.add(new Airport(data[0], data[1]));
 		}
-		
 		in = new Scanner(flightFile);
-		
 		while(in.hasNext())
 		{
 			data = in.nextLine().split(",");
 			flight.add(new Flight(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]));
 		}		
-
 		in.close();
 		airportFile.close();
 		flightFile.close();

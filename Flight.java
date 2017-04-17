@@ -289,34 +289,28 @@ public class Flight
 				//once both airports have been found, it should break out of the loop
 				if ((!(airportDepartCode.equals(""))) && (!(airportArriveCode.equals(""))))		stop = true;
 			}
-				//if an airport isnt found in the textfile, then an error message is outputted to the user
-			if(airportDepartCode.equals(""))				System.out.println("Error, " + airportDepart + " airport not found in Airports.txt");
-			else if(airportArriveCode.equals(""))		System.out.println("Error, " + airportArrive + " airport not found in Airports.txt");
 			
-			else
+			for(int i = 0;i < flightList.size();i++)
 			{
-				for(int i = 0;i < flightList.size();i++)
+				//go through all of the arrayList and check if the arrival/departing airport and the date matches what's on file, if it does, then the index of that is put into an array so I can call it again later on
+				if((flightList.get(i).airportDepart().equalsIgnoreCase(airportDepartCode)) && (flightList.get(i).airportArrival.equalsIgnoreCase(airportArriveCode)) && (checkDate(date.split("/"), flightList.get(i).dateDepart().split("/"), flightList.get(i).dateArrival().split("/"), flightList.get(i).days())))
 				{
-					//go through all of the arrayList and check if the arrival/departing airport and the date matches what's on file, if it does, then the index of that is put into an array so I can call it again later on
-					if((flightList.get(i).airportDepart().equalsIgnoreCase(airportDepartCode)) && (flightList.get(i).airportArrival.equalsIgnoreCase(airportArriveCode)) && (checkDate(date.split("/"), flightList.get(i).dateDepart().split("/"), flightList.get(i).dateArrival().split("/"), flightList.get(i).days())))
-					{
-						numbers[counter] = i;
-						counter++;
-					}
-					
+					numbers[counter] = i;
+					counter++;
 				}
-				//Print out how many flights were found corresponding to search criteria
-				if(counter == 1)			System.out.println("There was only 1 flight found matching that criteria.");
-				else 						System.out.println("There were " + (counter) + " flights found matching that criteria.");
 				
-				for(int i = 0; i < counter; i++)
-				{
-					//Output the textfile data to the user
-					System.out.println((i + 1) + ".\nFlight Number   :\t"  + flightList.get(numbers[i]).number() +
-													"\nleaving \t: \t" + airportDepart + "\t\t at : \t" + flightList.get(numbers[i]).timeDepart().substring(0,2) + ":" + flightList.get(numbers[i]).timeDepart().substring(2,4) +
-													"\nArriving to \t:\t" + airportArrive + "\t\t at : \t" + flightList.get(numbers[i]).timeArrival().substring(0,2) + ":" + flightList.get(numbers[i]).timeArrival().substring(2,4) );
-				}	
 			}
+			//Print out how many flights were found corresponding to search criteria
+			if(counter == 1)			System.out.println("There was only 1 flight found matching that criteria.");
+			else 						System.out.println("There were " + (counter) + " flights found matching that criteria.");
+			
+			for(int i = 0; i < counter; i++)
+			{
+				//Output the textfile data to the user
+				System.out.println((i + 1) + ".\nFlight Number   :\t"  + flightList.get(numbers[i]).number() +
+											"\nleaving \t: \t" + airportDepart + "\t\t at : \t" + flightList.get(numbers[i]).timeDepart().substring(0,2) + ":" + flightList.get(numbers[i]).timeDepart().substring(2,4) +
+											"\nArriving to \t:\t" + airportArrive + "\t\t at : \t" + flightList.get(numbers[i]).timeArrival().substring(0,2) + ":" + flightList.get(numbers[i]).timeArrival().substring(2,4) );
+			}	
 			sortFiles(airportList, flightList);
 		}
 		
@@ -333,12 +327,11 @@ public class Flight
 		*/
 		public static boolean checkDate(String[] dateInput, String[] dateStart, String[] dateEnd, String days)
 		{
-			
 			boolean isValid = false;
 			
 			String dayOfWeek = "";
 			String daysExtended = "";
-	
+
 			//Creates 3 variables of Calendar type
 			Calendar inputDate = Calendar.getInstance();
 			Calendar startDate = Calendar.getInstance();

@@ -36,17 +36,11 @@ public class Airport
 		boolean alreadyExists=false;
 		
 		//if both return true, loop through array list and check if airport or airportcode already exists
-		for(int i=0;i<airportList.size();i++) //looping through the airport list 
-			if(airportList.get(i).name.equalsIgnoreCase(airport) || (airportList.get(i).code.equalsIgnoreCase(airportCodeIn))) 
-				alreadyExists=true;
-			
-		if(!alreadyExists)
-		{
+		
 			airportList.add(new Airport(airport, airportCodeIn));
-			JOptionPane.showMessageDialog(null,"The airport was added successfully");
-		}
-		else
-			JOptionPane.showMessageDialog(null,"Error, airport/airport code already exists");
+			JOptionPane.showMessageDialog(null,"The airport was added successfully.");
+		
+		
 		sortFiles(airportList, flightList);
     }
 	
@@ -61,9 +55,7 @@ public class Airport
 	
 	public static void edit(ArrayList<Airport> airportList, ArrayList<Flight> flightList, String airportCode,String airport)
 	{
-		boolean isFound = false;
-
-		for(int i=0;i<airportList.size() && !isFound;i++) //loops through airportList
+		for(int i=0;i<airportList.size();i++) //loops through airportList
 		{
 			if(airportList.get(i).name.equalsIgnoreCase(airport) && !(airportList.get(i).code.equalsIgnoreCase(airportCode)))
 			{
@@ -72,7 +64,7 @@ public class Airport
 			if(airportList.get(i).code.equalsIgnoreCase(airportCode))
 			{
 				airportList.set(i, new Airport(airport, airportCode));
-				JOptionPane.showMessageDialog(null,"Airport successfully edited");
+				JOptionPane.showMessageDialog(null,"Airport successfully edited.");
 			}		
 		}
 		sortFiles(airportList, flightList);
@@ -91,41 +83,29 @@ public class Airport
 	public static void delete(ArrayList<Airport> airportList, ArrayList<Flight> flightList, String airportCode)
 	{
 		
-		boolean isFound =false;
-		boolean flightToDelete=false;
+		boolean airportToDelete=false;
 		int rowFound=0;
 
 		for(int i = 0;i < airportList.size();i++)
 		{
-			if(airportList.get(i).code.equalsIgnoreCase(airportCode))
+			if(airportList.get(i).code.equalsIgnoreCase(airportCode))rowFound=i;
+		}
+		airportList.remove(rowFound);
+		for (int i = 0; i <flightList.size(); i++)
+		{
+			if(flightList.get(i).airportDepart().equalsIgnoreCase(airportCode) || flightList.get(i).airportArrival().equalsIgnoreCase(airportCode))
 			{
-				isFound=true;
 				rowFound=i;
+				airportToDelete=true;
 			}
-		}
-		if(isFound)
-		{
-			airportList.remove(rowFound);
-			for (int i = 0; i <flightList.size(); i++)
+			if(airportToDelete)
 			{
-				if(flightList.get(i).airportDepart().equalsIgnoreCase(airportCode) || flightList.get(i).airportArrival().equalsIgnoreCase(airportCode))
-				{
-					rowFound=i;
-					flightToDelete=true;
-				}
-				if(flightToDelete)
-				{
-					flightList.remove(rowFound);
-					flightToDelete=false;
-					i--;
-				}
+				flightList.remove(rowFound);
+				airportToDelete=false;
+				i--;
 			}
-			JOptionPane.showMessageDialog(null,"Airport " + airportCode + " deleted successfully");
 		}
-		else
-		{
-			JOptionPane.showMessageDialog(null,"Error, Airport Code " + airportCode + " not found in Airports.txt");
-		}
+		JOptionPane.showMessageDialog(null,"Airport " + airportCode + " deleted successfully");
 		sortFiles(airportList, flightList);
 	}
 
@@ -233,6 +213,3 @@ public class Airport
 		}
      }
 }
-
-
-

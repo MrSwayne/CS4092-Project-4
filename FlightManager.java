@@ -28,30 +28,34 @@ public class FlightManager
 
 				readInFiles();
 				args=menus();
-				
-					switch(args[0].toUpperCase())
+			
+				switch(args[0].toUpperCase())
+				{
+					case "AA":       	Airport.add(airport, flight, args[1],args[2]); break;
+					case "EA":       	Airport.edit(airport, flight, args[1],args[2]); break;
+					case "DA":       	Airport.delete(airport, flight, args[1]); break;
+					case "AF":			Flight.add(airport, flight, args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]); break;
+					case "EF":       	Flight.edit(airport, flight, args[1], args[2], args[3], args[4]); break;
+					case "DF":       	Flight.delete(airport, flight, args[1]); break;
+					case "SF":       	Flight.searchFlight(airport, flight, args[1], args[2]); break;
+					case "SD":      	Flight.searchDate(airport, flight, args[1], args[2], args[3]); break;
+					default:        	
 					{
-						case "AA":       	Airport.add(airport, flight, args[1],args[2]); break;
-						case "EA":       	Airport.edit(airport, flight, args[1],args[2]); break;
-						case "DA":       	Airport.delete(airport, flight, args[1]); break;
-						case "AF":			Flight.add(airport, flight, args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]); break;
-						case "EF":       	Flight.edit(airport, flight, args[1], args[2], args[3], args[4]); break;
-						case "DF":       	Flight.delete(airport, flight, args[1]); break;
-						case "SF":       	Flight.searchFlight(airport, flight, args[1], args[2]); break;
-						case "SD":      	Flight.searchDate(airport, flight, args[1], args[2], args[3]); break;
-						default:        	
-						{
-							System.out.println("Error, invalid command supplied.");	
-						}			
-					}
-				
+						System.out.println("Error, invalid command supplied.");	
+					}			
+				}
 			}
+			
+			
+
+			restart();
+			
 
 		}
 		catch(ArrayIndexOutOfBoundsException e)
 		{
 			System.out.println("Error, invalid command supplied.");
-			displayInstructions();
+			
 		}
 		catch(NumberFormatException e)
 		{
@@ -59,76 +63,125 @@ public class FlightManager
 		}
 
 	}
+	public static void restart()
+	{
+		int n = JOptionPane.showConfirmDialog(null,"would you like to use another task","Flight Manager",JOptionPane.YES_NO_OPTION);
+		if(n == JOptionPane.YES_OPTION){
+			JOptionPane.showMessageDialog(null, "GOODBYE");
+		}
+		else {
+			
+			System.exit(0);
+		}
+	}
+	/*
+		@authors 		Ian McKay
+	
+		Input: 			No Input
+	
+		Processing:		
+	
+        Output:			String array containing all the inputs		
+*/
 	public static String[] menus()
 	{
 		String[] choices = { "Add Airport", "Edit Airport", "Delete Airport", "Add Flight", "Edit Flight", "Delete Flight", "Search Flight", "Search Flight by Date" };
-		String input = (String) JOptionPane.showInputDialog(null, "Choose a program to launch", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, choices,choices[1]);
+		String input = (String) JOptionPane.showInputDialog(null, "Choose a program to launch", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, choices,choices[0]);
 		String[] selection;
 		System.out.println(input);
+		String[] airportCode2;
+		
+		ArrayList<String> airports = new ArrayList<String>();
+		for (int i=0;i<airport.size();i++) airports.add(airport.get(i).name());
+		String[] airportNames= airports.toArray(new String[airports.size()]);
+		
+		
+		ArrayList<String> airportCodes = new ArrayList<String>();
+		for (int i=0;i<airport.size();i++) airportCodes.add(airport.get(i).name());
+		String[] airportCode= airportCodes.toArray(new String[airportCodes.size()]);
+		
+		
+		ArrayList<String> flights = new ArrayList<String>();
+		for (int i=0;i<flight.size();i++) flights.add(flight.get(i).number());
+		String[] flightNums= flights.toArray(new String[flights.size()]);
 		switch(input)
+		
+		
 		{
 			case "Add Airport":     
 				selection = new String[3];
 				selection[0]="AA";
-				selection[1] = menuInput("Please enter an airport name");
-				selection[2] = menuInput("Please enter a three letter airport code");
+				selection[1] = menuInput("Please enter an airport name.",selection,1);
+				selection[2] = menuInput("Please enter a three letter airport code.",selection,2);
 				break;
 				
 			case "Edit Airport":
 				selection = new String[3];
 				selection[0]="EA";
-				selection[1] = menuInput("Please select an airport code");
-				selection[2] = menuInput("Please enter new airport name");
+				selection[1] = (String) JOptionPane.showInputDialog(null, "Choose an airport to edit.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode,airportCode[0]);
+				selection[2] = menuInput("Please enter new airport name",selection,2);
 				break;
 			case "Delete Airpor":
 				selection = new String[2];
 				selection[0]="DA";
-				selection[1] = menuInput("Please the airport code to be deleted");
+				selection[1] = (String) JOptionPane.showInputDialog(null, "Choose an airport to delete.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportNames,airportNames[0]);
 				break;
 
 			case "Add Flight":
 				selection = new String[9];
 				selection[0]="AF";
-				selection[1] = menuInput("Please enter flight number");
-				selection[2] = menuInput("Please enter departing airport");
-				selection[3] = menuInput("Please enter arrival airport");
-				selection[4] = menuInput("Please enter departing time");
-				selection[5] = menuInput("Please enter arival time");
-				selection[6] = menuInput("Please enter week schedule");
-				selection[7] = menuInput("Please enter starting flight date");
-				selection[8] = menuInput("Please enter last flight date");
+				selection[1] = menuInput("Please enter flight number.",selection,1);
+				selection[2] =(String) JOptionPane.showInputDialog(null, "Please choose the airport of departure.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode,airportCode[0]);
+				
+				airportCodes.remove(selection[2]);
+				airportCode2= airportCodes.toArray(new String[airportCodes.size()]);
+				
+				selection[3] = (String) JOptionPane.showInputDialog(null, "Please choose the airport of arrival.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode2,airportCode2[0]);
+				selection[4] = menuInput("Please enter departing time.",selection,4);
+				selection[5] = menuInput("Please enter arival time.",selection,5);
+				selection[6] = menuInput("Please enter week schedule.",selection,6);
+				selection[7] = menuInput("Please enter starting flight date.",selection,7);
+				selection[8] = menuInput("Please enter last flight date.",selection,8);
 				break;
 
 
 			case "Edit Flight":          
 				selection = new String[5];
 				selection[0]="EF";
-				selection[1] = menuInput("Please enter flight number");
-				selection[2] = menuInput("Please enter week schedule");
-				selection[3] = menuInput("Please enter starting flight date");
-				selection[4] = menuInput("Please enter last flight date");
+				selection[1] = (String) JOptionPane.showInputDialog(null, "Choose a flight to edit.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, flightNums,flightNums[0]);
+				selection[2] = menuInput("Please enter week schedule.",selection,2);
+				selection[3] = menuInput("Please enter starting flight date.",selection,3);
+				selection[4] = menuInput("Please enter last flight date.",selection,4);
 				break;
 
 
 			case "Delete Flight":        
 				selection = new String[2];
 				selection[0]="DF";
-				selection[1] = menuInput("Please enter flight number");
+				selection[1] = (String) JOptionPane.showInputDialog(null, "Choose a flight to edit.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, flightNums,flightNums[0]);
 				break;
 
 			case "Search Flight":      
 				selection = new String[3];
 				selection[0]="SF";
-				selection[1] = menuInput("Please enter departing airport");
-				selection[2] = menuInput("Please enter arival time");
+				selection[1] = (String) JOptionPane.showInputDialog(null, "Please select the airport of departure.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode,airportCode[0]);
+				
+				airportCodes.remove(selection[1]);
+				airportCode2= airportCodes.toArray(new String[airportCodes.size()]);
+				
+				selection[2] = (String) JOptionPane.showInputDialog(null, "Please select the airport of arrival.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode2,airportCode2[0]);
 				break;
 
 			case "Search Flight by Date":       
 				selection = new String[4];
 				selection[0]="SD";
-				selection[1] = menuInput("Please enter departing airport");
-				selection[2] = menuInput("Please enter arival time");
-				selection[3] = menuInput("Please enter starting flight date");
+				selection[1] = (String) JOptionPane.showInputDialog(null, "Please select the airport of departure.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode,airportCode[0]);
+				
+				airportCodes.remove(selection[1]);
+				airportCode2= airportCodes.toArray(new String[airportCodes.size()]);
+				
+				selection[2] = (String) JOptionPane.showInputDialog(null, "Please select the airport of arrival.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode2,airportCode2[0]);
+				selection[3] = menuInput("Please enter the date for the flights you wish to search.",selection,3);
 				break;
 
 			default:            
@@ -139,17 +192,33 @@ public class FlightManager
 		}
 		return selection;
 	}
-	public static String menuInput(String messege)
+	public static String menuInput(String messege, String[] args, int num)
 	{
-		String input;
-		boolean inputRecieved=false;
-		input= JOptionPane.showInputDialog(messege);
-		while(!inputRecieved){
-			if(input.equals(null) || input.equals(""))input= JOptionPane.showInputDialog(messege);
-			else inputRecieved=true;
+		try {
+			
+			String input;
+			boolean inputRecieved=false;
+			args[num]= JOptionPane.showInputDialog(messege);
+			while(!inputRecieved){
+				if(args[num].equals("") || !validation(args,num))input= JOptionPane.showInputDialog(messege);
+				else inputRecieved=true;
+			}
+			return args[num];
+		} catch(NullPointerException e) {
+			restart();
 		}
-		return input;
+		return args[num];
 	}
+	/*
+		@authors 		Ian McKay
+	
+		Input: 			String [] args - String array containing all the elements inputted by the user so far, 
+						validationNum- the number that the current input is at, to be tested
+	
+		Processing:		
+	
+        Output:			boolean isValid		
+*/
 	public static boolean validation(String[] args, int validationNum)
     {
         
@@ -179,6 +248,7 @@ public class FlightManager
                 }
                 if (found) 
                 {
+					System.out.print(args[1]);
                     JOptionPane.showMessageDialog(null,"Airport name already exists, try again","Error",JOptionPane.PLAIN_MESSAGE);
                     return false;
                 }
@@ -229,7 +299,7 @@ public class FlightManager
 				}
 				else if (args[0].equals("EF"))
 				{
-					return checkDays(args[2]);
+					isValid=checkDays(args[2]);
 				}
                 break;
                 
@@ -336,7 +406,15 @@ public class FlightManager
         }
     return isValid;
     }
+	/*
+		@authors 		Adam Swayne
 	
+		Input: 			String of the sequence of days that the flight is functioning
+	
+		Processing:		checks if the days follow the pattern required
+	
+        Output:			boolean validation		
+*/
 	public static boolean checkDays(String input)
 	{
 		String days = "MTWTFSS";
@@ -369,7 +447,15 @@ public class FlightManager
 		else return true;
 		return false;
 	}
-
+/*
+		@authors 		Adam Swayne && Ian McKay
+	
+		Input: 			a String of elemtents that contain the date
+	
+		Processing:		Whether or not the date is valid
+	
+        Output:			boolean if date is valid		
+*/
     public static boolean checkDate(String[] dateElements)
     {
 
@@ -385,38 +471,34 @@ public class FlightManager
 		Calendar date = Calendar.getInstance();
 		date.set(yyInt,mmInt,ddInt);
 		
-		if (date.before(present)) return false;
+		if (date.before(present))
+		{
+			JOptionPane.showMessageDialog(null,"Error, date cannot be before current date","Error",JOptionPane.PLAIN_MESSAGE);
+			return false;
+		} 
         
-        if(ddInt == 0 || mmInt == 0 || yyInt == 0)                                                              dateIsValid =false;
-        
-        else if(mmInt > 12)                                                                                     dateIsValid =false;
-        
-        else if(ddInt == 29 && mmInt == 2 && ((yyInt % 4 == 0 && yyInt % 100 != 0) || (yyInt % 400 == 0)))      dateIsValid =true;
-        
-        else if(ddInt > daysArray[mmInt -1])                                                                    dateIsValid =false;
-
+        if(ddInt == 0 || mmInt == 0 || yyInt == 0)
+		{
+			JOptionPane.showMessageDialog(null,"Error, niether day, month, or year can be 0.","Error",JOptionPane.PLAIN_MESSAGE);
+			dateIsValid =false;
+		}
+        else if(mmInt > 12)
+		{
+			JOptionPane.showMessageDialog(null,"Error, month cannot be greater than 12.","Error",JOptionPane.PLAIN_MESSAGE);
+			dateIsValid =false;
+		}        
+        else if(ddInt == 29 && mmInt == 2 && ((yyInt % 4 == 0 && yyInt % 100 != 0) || (yyInt % 400 == 0)))
+		{
+			dateIsValid =true;
+		}        
+        else if(ddInt > daysArray[mmInt -1])
+		{
+			JOptionPane.showMessageDialog(null,"Error, the day cannot be that high of a number.","Error",JOptionPane.PLAIN_MESSAGE);
+			dateIsValid =false;
+		}
 
         return dateIsValid;
     }
-
-
-
-
-	public static void displayInstructions() 
-	{ 
-		System.out.println(""); 
-		System.out.println("************************ Assistance *****************************************************");
-		System.out.println("Add new airport               e.g. java FlightManager AA Lisbon LIS"); 
-		System.out.println("Edit airport                  e.g. java FlightManager EA BHD Belfast");
-		System.out.println("Delete airport                e.g. java FlightManager DA SNN"); 
-		System.out.println("Add new flight                e.g. java FlightManager AF ER1230 DUB SNN 1310 1425 -TWTF-- 10/10/2017 15/11/2017");
-		System.out.println("Edit flight                   e.g. java FlightManager EF EF3240 MTW-F-- 1/5/2017 31/10/2017"); 
-		System.out.println("Delete flight                 e.g. java FlightManager DF EH3240"); 
-		System.out.println("Search for flights            e.g. java FlightManager SF Dublin Shannon"); 
-		System.out.println("Search for flights on date    e.g. java FlightManager SD Dublin Shannon 1/12/2017"); 
-		System.out.println("*****************************************************************************************");
-	}
-
 
 /*
 		@authors	Adam Swayne

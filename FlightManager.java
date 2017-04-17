@@ -28,8 +28,7 @@ public class FlightManager
 
 				readInFiles();
 				args=menus();
-				if(validation(args))
-				{
+				
 					switch(args[0].toUpperCase())
 					{
 						case "AA":       	Airport.add(airport, flight, args[1],args[2]); break;
@@ -45,7 +44,7 @@ public class FlightManager
 							System.out.println("Error, invalid command supplied.");	
 						}			
 					}
-				}
+				
 			}
 
 		}

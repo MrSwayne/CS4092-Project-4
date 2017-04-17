@@ -89,8 +89,8 @@ public class Flight
 			if(airportList.get(i).code().equalsIgnoreCase(airportArrival))
 				aCodeFound = true;
 		}
-		if(!(aCodeFound))	System.out.println("Error, arrival airport not found in Airports.txt");
-		if(!(dCodeFound))	System.out.println("Error, Departure airport not found in Airports.txt");
+		if(!(aCodeFound))	JOptionPane.showMessageDialog(null,"Error, arrival airport not found in Airports.txt");
+		if(!(dCodeFound))	JOptionPane.showMessageDialog(null,"Error, Departure airport not found in Airports.txt");
 		else
 		{
 
@@ -99,11 +99,11 @@ public class Flight
 					flightExists = true;	
 			if(!flightExists)
 			{
-				System.out.println("Flight " + flightNum + " added successfully");
+				JOptionPane.showMessageDialog(null,"Flight " + flightNum + " added successfully");
 				flightList.add(new Flight(flightNum, airportDepart, airportArrival, timeDepart, timeArrival, days, dateStart, dateEnd));
 			}
 			else
-				System.out.println("Error, flight " + flightNum + " already exists");
+				JOptionPane.showMessageDialog(null,"Error, flight " + flightNum + " already exists");
 		}
 		sortFiles(airportList, flightList);
 	}
@@ -126,7 +126,7 @@ public class Flight
 			if(flightList.get(i).number.equalsIgnoreCase(flightNum))
 				isFound = true;
 		if(!isFound)
-			System.out.println("Error, Flight Number " + flightNum + " not found");
+			JOptionPane.showMessageDialog(null,"Error, Flight Number " + flightNum + " not found");
 
 		else
 		{
@@ -148,7 +148,7 @@ public class Flight
 				flightList.set(rowFound,new Flight(flightNum, flightList.get(rowFound).airportDepart(), flightList.get(rowFound).airportArrival(),
 																flightList.get(rowFound).timeDepart, flightList.get(rowFound).timeArrival,
 																 flightDays, startDateFlight, endDateFlight));
-				System.out.println("Flight successfully edited");
+				JOptionPane.showMessageDialog(null,"Flight successfully edited");
 			}
 		}
 		sortFiles(airportList, flightList);
@@ -180,14 +180,14 @@ public class Flight
 			  	{
 					rowFound = i;
 					flightList.remove(rowFound);
-					System.out.println("Flight " + flightNum + " was successfully deleted");
+					JOptionPane.showMessageDialog(null,"Flight " + flightNum + " was successfully deleted");
 					flightToDelete = false;
 					i--;
 			  	}
 		  	}
 		}
 		else
-			System.out.println("Error, flight Number " + flightNum + " was not found in flights.txt");
+			JOptionPane.showMessageDialog(null,"Error, flight Number " + flightNum + " was not found in flights.txt");
 	}
 
 	/*
@@ -237,24 +237,24 @@ public class Flight
 
 			if(!(flightsFound.size() == 0))
 			{
-				System.out.println("The Following Flight(s) depart from " + airportDepart + " and arrive in " + airportArrive + ".");
+				JOptionPane.showMessageDialog(null,"The Following Flight(s) depart from " + airportDepart + " and arrive in " + airportArrive + ".");
 				for(int i = 0;i < flightsFound.size();i++)
 				{
-					System.out.println("Flight Number :\t\t" + flightList.get(flightsFound.get(i)).number() + "\nDeparting from :\t" + departName +
+					JOptionPane.showMessageDialog(null,"Flight Number :\t\t" + flightList.get(flightsFound.get(i)).number() + "\nDeparting from :\t" + departName +
 					"\t\t At:\t" + flightList.get(flightsFound.get(i)).timeDepart() + "\nArriving to :\t\t" + arriveName +
 					"\t\t At:\t" + flightList.get(flightsFound.get(i)).timeArrival() + "\nRunning on :\t\t" + flightList.get(flightsFound.get(i)).days() +
 					"\nFrom :\t\t\t" + flightList.get(flightsFound.get(i)).dateDepart() + "\nUntil :\t\t\t" + flightList.get(flightsFound.get(i)).dateArrival());
 				}
 			}
 			else
-				System.out.println("No flights departing from " + airportDepart + " and arriving to " + airportArrive + " were found");
+				JOptionPane.showMessageDialog(null,"No flights departing from " + airportDepart + " and arriving to " + airportArrive + " were found");
 		}
 		else
 		{
 			if(!departFound)
-				System.out.println("Error, departure Airport not found");
+				JOptionPane.showMessageDialog(null,"Error, departure Airport not found");
 			if(!arriveFound)
-				System.out.println("Error, Arrival Airport not found");
+				JOptionPane.showMessageDialog(null,"Error, Arrival Airport not found");
 		}
 		sortFiles(airportList, flightList);
 	}
@@ -301,8 +301,8 @@ public class Flight
 				
 			}
 			//Print out how many flights were found corresponding to search criteria
-			if(counter == 1)			System.out.println("There was only 1 flight found matching that criteria.");
-			else 						System.out.println("There were " + (counter) + " flights found matching that criteria.");
+			if(counter == 1)			JOptionPane.showMessageDialog(null,"There was only 1 flight found matching that criteria.");
+			else 						JOptionPane.showMessageDialog(null,"There were " + (counter) + " flights found matching that criteria.");
 			
 			for(int i = 0; i < counter; i++)
 			{
@@ -370,7 +370,7 @@ public class Flight
 				//if invalid args in the flights.txt file, an error is thrown
 				catch(StringIndexOutOfBoundsException e)
 				{
-					System.out.println("Error, Please make sure the days are in the format ------- with each dash representing a day i.e -TWT-S- represents tuesday, wednesday, thursday and saturday");
+					JOptionPane.showMessageDialog(null,"Error, Please make sure the days are in the format ------- with each dash representing a day i.e -TWT-S- represents tuesday, wednesday, thursday and saturday");
 				}
 			}
 			return isValid;

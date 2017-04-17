@@ -75,14 +75,14 @@ public class FlightManager
 	*/
 	public static void restart()
 	{
-		int n = JOptionPane.showConfirmDialog(null,"would you like to use another task","Flight Manager",JOptionPane.YES_NO_OPTION);
+		int n = JOptionPane.showConfirmDialog(null,"Would you like to use another task.","Flight Manager",JOptionPane.YES_NO_OPTION);
 		if(n == JOptionPane.YES_OPTION) programLauncher();
 		else System.exit(0);
 	}
 	public static void exit()
 	{
 		int n = JOptionPane.showConfirmDialog(null,"Are you sure you want to exit?.","Flight Manager",JOptionPane.YES_NO_OPTION);
-		if(n == JOptionPane.YES_OPTION) System.exit(0);;
+		if(n == JOptionPane.YES_OPTION) System.exit(0);
 		else restart();
 	}
 	/*
@@ -99,6 +99,7 @@ public class FlightManager
 			String[] airport2;
 			String[] choices = { "Add Airport", "Edit Airport", "Delete Airport", "Add Flight", "Edit Flight", "Delete Flight", "Search Flight", "Search Flight by Date" };
 			String input = (String) JOptionPane.showInputDialog(null, "Choose a program to launch", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, choices,choices[0]);
+			
 			
 			ArrayList<String> airports = new ArrayList<String>();
 			for (int i=0;i<airport.size();i++) airports.add(airport.get(i).name());
@@ -196,7 +197,22 @@ public class FlightManager
 			return selection;
 		}
 		catch(NullPointerException e) {exit();}
-		return selection;
+		String[] nothing = new String[0];
+		return nothing;
+	}
+	public static String menuInput(String messege, String[] args, int num)
+	{
+		try {
+			boolean inputRecieved=false;
+			args[num]= JOptionPane.showInputDialog(messege);
+			while(!inputRecieved){
+				if(args[num].equals("") || !validation(args,num))args[num]= JOptionPane.showInputDialog(messege);
+				else inputRecieved=true;
+			}
+			return args[num];
+		} 
+		catch(NullPointerException e) {restart();}
+		return args[num];
 	}
 	/*
 		@authors 		Ian McKay

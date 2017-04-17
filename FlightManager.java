@@ -87,11 +87,12 @@ public class FlightManager
 	*/
 	public static String[] menus()
 	{
+		String[] selection;
+		String[] airportCode2;
+		String[] airport2;
 		String[] choices = { "Add Airport", "Edit Airport", "Delete Airport", "Add Flight", "Edit Flight", "Delete Flight", "Search Flight", "Search Flight by Date" };
 		String input = (String) JOptionPane.showInputDialog(null, "Choose a program to launch", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, choices,choices[0]);
-		String[] selection;
-		System.out.println(input);
-		String[] airportCode2;
+		
 		
 		ArrayList<String> airports = new ArrayList<String>();
 		for (int i=0;i<airport.size();i++) airports.add(airport.get(i).name());
@@ -104,8 +105,8 @@ public class FlightManager
 		ArrayList<String> flights = new ArrayList<String>();
 		for (int i=0;i<flight.size();i++) flights.add(flight.get(i).number());
 		String[] flightNums= flights.toArray(new String[flights.size()]);
-		switch(input)
 		
+		switch(input)
 		{
 			case "Add Airport":     
 				selection = new String[3];
@@ -160,23 +161,23 @@ public class FlightManager
 			case "Search Flight":      
 				selection = new String[3];
 				selection[0]="SF";
-				selection[1] = (String) JOptionPane.showInputDialog(null, "Please select the airport of departure.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode,airportCode[0]);
+				selection[1] = (String) JOptionPane.showInputDialog(null, "Please select the airport of departure.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportNames,airportNames[0]);
 				
-				airportCodes.remove(selection[1]);
-				airportCode2= airportCodes.toArray(new String[airportCodes.size()]);
+				airports.remove(selection[1]);
+				airport2= airports.toArray(new String[airports.size()]);
 				
-				selection[2] = (String) JOptionPane.showInputDialog(null, "Please select the airport of arrival.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode2,airportCode2[0]);
+				selection[2] = (String) JOptionPane.showInputDialog(null, "Please select the airport of arrival.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airport2,airport2[0]);
 				break;
 
 			case "Search Flight by Date":       
 				selection = new String[4];
 				selection[0]="SD";
-				selection[1] = (String) JOptionPane.showInputDialog(null, "Please select the airport of departure.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode,airportCode[0]);
+				selection[1] = (String) JOptionPane.showInputDialog(null, "Please select the airport of departure.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportNames,airportNames[0]);
 				
-				airportCodes.remove(selection[1]);
-				airportCode2= airportCodes.toArray(new String[airportCodes.size()]);
+				airports.remove(selection[1]);
+				airport2= airports.toArray(new String[airports.size()]);
 				
-				selection[2] = (String) JOptionPane.showInputDialog(null, "Please select the airport of arrival.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode2,airportCode2[0]);
+				selection[2] = (String) JOptionPane.showInputDialog(null, "Please select the airport of arrival.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airport2,airport2[0]);
 				selection[3] = menuInput("Please enter the date for the flights you wish to search.",selection,3);
 				break;
 
@@ -198,7 +199,8 @@ public class FlightManager
 				else inputRecieved=true;
 			}
 			return args[num];
-		} catch(NullPointerException e) {restart();}
+		} 
+		catch(NullPointerException e) {restart();}
 		return args[num];
 	}
 	/*
@@ -213,7 +215,6 @@ public class FlightManager
 */
 	public static boolean validation(String[] args, int validationNum)
     {
-        
         boolean isValid = false;
         String input;
         int airportSize = airport.size();

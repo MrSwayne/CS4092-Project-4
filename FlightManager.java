@@ -166,7 +166,7 @@ public class FlightManager
 				case "Delete Flight":        
 					selection = new String[2];
 					selection[0]="DF";
-					selection[1] = (String) JOptionPane.showInputDialog(null, "Choose a flight to edit.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, flightNums,flightNums[0]);
+					selection[1] = (String) JOptionPane.showInputDialog(null, "Choose a flight to delete.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, flightNums,flightNums[0]);
 					for(int i=0; i<flight.size();i++)if(selection[1].equals(flightNums[i]))selection[1]=flight.get(i).number();
 					break;
 

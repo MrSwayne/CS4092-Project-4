@@ -126,7 +126,6 @@ public class FlightManager
 					selection[0]="EA";
 					selection[1] = (String) JOptionPane.showInputDialog(null, "Choose an airport to edit.", "Flight Manager", JOptionPane.QUESTION_MESSAGE, null, airportCode,airportCode[0]);
 					for(int i=0; i<airport.size();i++)if(selection[1].equals(airportCode[i]))selection[1]=airport.get(i).code();
-					System.out.println(selection[1]);
 					selection[2] = menuInput("Please enter new airport name",selection,2);
 					break;
 				case "Delete Airport":

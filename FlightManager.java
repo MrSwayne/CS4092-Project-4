@@ -383,7 +383,7 @@ public class FlightManager
 				return checkDays(args[6]);
 				
 			case 7: 
-				startDates = args[3].split("/");
+				startDates = args[7].split("/");
                 return checkDate(startDates);
 				
 			case 8: 
